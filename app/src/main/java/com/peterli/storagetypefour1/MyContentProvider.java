@@ -32,16 +32,19 @@ public class MyContentProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
-        // Implement this to handle requests to delete one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
+    public boolean onCreate() {
+        mContext = getContext();
+        dbHelper = new DBHelper(getContext());
+        sqLiteDatabase = dbHelper.getWritableDatabase();
 
-    @Override
-    public String getType(@NonNull Uri uri) {
-        // TODO: Implement this to handle requests for the MIME type of the data
-        // at the given URI.
-        throw new UnsupportedOperationException("Not yet implemented");
+        sqLiteDatabase.execSQL("delete from Student");
+        sqLiteDatabase.execSQL("insert into Student(name,age) values(\"小明\",17)");
+        sqLiteDatabase.execSQL("insert into Student(name,age) values(\"小红\",18)");
+
+        sqLiteDatabase.execSQL("delete from Teacher");
+        sqLiteDatabase.execSQL("insert into Teacher(name,age) values(\"张老师\",54)");
+        sqLiteDatabase.execSQL("insert into Teacher(name,age) values(\"王老师\",47)");
+        return true;
     }
 
     @Override
@@ -58,22 +61,6 @@ public class MyContentProvider extends ContentProvider {
 //        long personid = ContentUris.parseId(uri);
 //        System.out.println(personid);
         return uri;
-    }
-
-    @Override
-    public boolean onCreate() {
-        mContext = getContext();
-        dbHelper = new DBHelper(getContext());
-        sqLiteDatabase = dbHelper.getWritableDatabase();
-
-        sqLiteDatabase.execSQL("delete from Student");
-        sqLiteDatabase.execSQL("insert into Student(name,age) values(\"小明\",17)");
-        sqLiteDatabase.execSQL("insert into Student(name,age) values(\"小红\",18)");
-
-        sqLiteDatabase.execSQL("delete from Teacher");
-        sqLiteDatabase.execSQL("insert into Teacher(name,age) values(\"张老师\",54)");
-        sqLiteDatabase.execSQL("insert into Teacher(name,age) values(\"王老师\",47)");
-        return true;
     }
 
     @Override
@@ -98,6 +85,20 @@ public class MyContentProvider extends ContentProvider {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
+
+    @Override
+    public String getType(@NonNull Uri uri) {
+        // TODO: Implement this to handle requests for the MIME type of the data
+        // at the given URI.
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+
+    @Override
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
+        // Implement this to handle requests to delete one or more rows.
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 
     /**
      * 根据URI匹配 URI_CODE，从而匹配ContentProvider中相应的表名
